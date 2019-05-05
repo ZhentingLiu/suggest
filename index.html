@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="../../Ajax-Bootstrap/03/css/bootstrap.css">
+</head>
+<body>
+    <div id="app">
+        <input type="text"class="form-control" v-model="search">
+        <!-- <p>{{answer}}</p> -->
+        <ul class="list-group">
+            <li class="list-group-item" v-for="(item, index) in answer" :key="index">{{ item[0] }}
+            </li>
+        </ul>
+        <p v-if="!answer.length">暂无搜索结果</p>
+    </div>
+    
+    <script>
+        var app=new Vue({
+            el:'#app',
+            data:{
+                answer:[],
+                search:'',
+                canClick: true
+            },
+            watch: {
+                search: function (newValue) {
+                    
+                    if (this.canClick) {
+                        // console.log(newValue);
+                        // this.getAnswer()
+                        axios.get('http://api.kele8.cn/agent?url=https://suggest.taobao.com/sug?code=utf-8&q='+newValue, {
+                            params: {
+                                page: 1
+                            }
+                        })
+                        // .then(function (data) {
+                        //     console.log(JSON.parse(result.request.responseText).result);
+                        //     this.answer=data.result
+                        // }) 
+                        .then(result => {
+                            console.log(result.data.result);
+                            this.answer = result.data.result
+                        })
+                        .catch((err) => {
+                            
+                        });
+                    }
+                }
+            },
+                    })
+                    
+                    
+                </script>
+            </body>
+            </html>
